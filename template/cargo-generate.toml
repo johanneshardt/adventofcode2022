@@ -1,0 +1,8 @@
+[placeholders.day]
+type = "string"
+prompt = "Which day of 'Advent of Code' are you solving?"
+regex = "^^([0][1-9]|1[0-9]|2[0-4])$$"
+
+[placeholders.title]
+type = "string"
+prompt = "What's the day's title?"
