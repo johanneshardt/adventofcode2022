@@ -3,7 +3,7 @@ use std::{collections::HashMap, collections::HashSet};
 use crate::util::Solution;
 use itertools::Itertools;
 
-pub const SOLUTION: Solution<'static> = Solution {
+pub const SOLUTION: Solution<'static, i32> = Solution {
     day: 03,
     title: "Rucksack Reorganization",
     input: include_str!("./in"),
@@ -71,8 +71,7 @@ fn part2(input: &str) -> Option<i32> {
         }
         *m.iter()
             .find(|(_, value)| **value == 3)
-            .unwrap_or_else(|| panic!("No common item type found in line: {:?}",
-                &rucksacks))
+            .unwrap_or_else(|| panic!("No common item type found in line: {:?}", &rucksacks))
             .0
     });
 

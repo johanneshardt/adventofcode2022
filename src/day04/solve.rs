@@ -1,4 +1,3 @@
-
 use std::ops::RangeInclusive;
 
 use crate::util::Solution;
@@ -7,7 +6,7 @@ use color_eyre::eyre::ContextCompat;
 use color_eyre::eyre::WrapErr;
 use itertools::Itertools;
 
-pub const SOLUTION: Solution<'static> = Solution {
+pub const SOLUTION: Solution<'static, i32> = Solution {
     day: 04,
     title: "Camp Cleanup",
     input: include_str!("./in"),

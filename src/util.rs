@@ -1,23 +1,24 @@
 use color_eyre::eyre::Result;
 use color_eyre::eyre::WrapErr;
+use std::fmt::Debug;
 use std::{fmt, fs, path::Path};
 
-pub struct Solution<'a> {
+pub struct Solution<'a, T> {
     pub day: i32,
     pub title: &'a str,
     pub input: &'a str,
-    pub part1: fn(&str) -> Option<i32>,
-    pub part2: fn(&str) -> Option<i32>,
+    pub part1: fn(&str) -> Option<T>,
+    pub part2: fn(&str) -> Option<T>,
 }
 
 // Todo implement benchmarking
-impl<'a> Solution<'a> {
-    fn evaluate(&self) -> (Option<i32>, Option<i32>) {
+impl<'a, T> Solution<'a, T> {
+    fn evaluate(&self) -> (Option<T>, Option<T>) {
         ((self.part1)(self.input), (self.part2)(self.input))
     }
 }
 
-impl<'a> fmt::Debug for Solution<'a> {
+impl<'a, T> fmt::Debug for Solution<'a, T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Solution")
             .field("day", &self.day)
@@ -26,7 +27,10 @@ impl<'a> fmt::Debug for Solution<'a> {
     }
 }
 
-impl<'a> fmt::Display for Solution<'a> {
+impl<'a, T> fmt::Display for Solution<'a, T>
+where
+    T: Debug,
+{
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (p1, p2) = self.evaluate();
         write!(
@@ -39,11 +43,14 @@ impl<'a> fmt::Display for Solution<'a> {
     }
 }
 
-pub struct Solutions<'a> {
-    pub all: Vec<Solution<'a>>,
+pub struct Solutions<'a, T> {
+    pub all: Vec<Solution<'a, T>>,
 }
 
-impl fmt::Display for Solutions<'_> {
+impl<T> fmt::Display for Solutions<'_, T>
+where
+    T: Debug,
+{
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.all.iter().fold(Ok(()), |res, solution| {
             res.and_then(|_| writeln!(f, "{}", solution)) // clever solution to implement Display for Vec<Solution>, since Vec is outside the crate (https://github.com/apolitical/impl-display-for-vec)
