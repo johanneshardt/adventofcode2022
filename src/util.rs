@@ -1,7 +1,10 @@
 use color_eyre::eyre::Result;
 use color_eyre::eyre::WrapErr;
 use std::fmt::Debug;
+use std::fmt::Display;
 use std::{fmt, fs, path::Path};
+
+pub trait SolutionType: Display {}
 
 pub struct Solution<'a, T> {
     pub day: i32,
@@ -43,14 +46,15 @@ where
     }
 }
 
-pub struct Solutions<'a, T> {
-    pub all: Vec<Solution<'a, T>>,
+impl<'a> SolutionType for Solution<'a, i32> {}
+impl<'a> SolutionType for Solution<'a, u32> {}
+impl<'a> SolutionType for Solution<'a, String> {}
+
+pub struct Solutions {
+    pub all: Vec<Box<dyn SolutionType>>,
 }
 
-impl<T> fmt::Display for Solutions<'_, T>
-where
-    T: Debug,
-{
+impl fmt::Display for Solutions {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.all.iter().fold(Ok(()), |res, solution| {
             res.and_then(|_| writeln!(f, "{}", solution)) // clever solution to implement Display for Vec<Solution>, since Vec is outside the crate (https://github.com/apolitical/impl-display-for-vec)
