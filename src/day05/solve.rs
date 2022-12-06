@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::util::Solution;
 
 pub const SOLUTION: Solution<'static, String> = Solution {
@@ -100,7 +102,8 @@ fn part1(input: &str) -> Option<String> {
             .s
             .iter()
             .filter_map(|s| s.s.last())
-            .fold("".to_owned(), |acc, curr| acc + &curr.c.to_string()),
+            .map(|c| c.to_string())
+            .collect(),
     )
 }
 
@@ -116,13 +119,20 @@ fn part2(input: &str) -> Option<String> {
             .s
             .iter()
             .filter_map(|s| s.s.last())
-            .fold("".to_owned(), |acc, curr| acc + &curr.c.to_string()),
+            .map(|c| c.to_string())
+            .collect(),
     )
 }
 
 #[derive(Debug, Clone, Copy)]
 pub(self) struct Crate {
     c: char,
+}
+
+impl Display for Crate {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.c)
+    }
 }
 
 pub(self) struct Stack {
