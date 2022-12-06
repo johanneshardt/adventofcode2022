@@ -15,7 +15,7 @@ fn parse(input: &str) -> Vec<(Move, Move)> {
         .map(|line| {
             if let Some((fst, snd)) = line
                 .trim()
-                .split(" ")
+                .split(' ')
                 .map(|c| c.try_into().unwrap())
                 .collect_tuple()
             {

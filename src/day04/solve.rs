@@ -1,9 +1,9 @@
-use std::collections::btree_map::Range;
+
 use std::ops::RangeInclusive;
 
 use crate::util::Solution;
 use color_eyre::eyre::ContextCompat;
-use color_eyre::eyre::Result;
+
 use color_eyre::eyre::WrapErr;
 use itertools::Itertools;
 
@@ -20,10 +20,10 @@ fn parse(input: &str) -> Vec<(RangeInclusive<i32>, RangeInclusive<i32>)> {
         .split_ascii_whitespace()
         .map(|line| {
             line.trim()
-                .split(",")
+                .split(',')
                 .map(|range| {
                     let (left, right): (i32, i32) = range
-                        .split("-")
+                        .split('-')
                         .map(|i| {
                             i.parse::<i32>()
                                 .wrap_err(format!("Can't parse number: {}", i))

@@ -31,5 +31,5 @@ fn part1(input: &str) -> Option<i32> {
 }
 
 fn part2(input: &str) -> Option<i32> {
-    Some(parse(input)[0..3].into_iter().sum())
+    Some(parse(input)[0..3].iter().sum())
 }

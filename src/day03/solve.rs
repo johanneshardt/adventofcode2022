@@ -69,14 +69,11 @@ fn part2(input: &str) -> Option<i32> {
                 }
             }
         }
-        m.iter()
+        *m.iter()
             .find(|(_, value)| **value == 3)
-            .expect(&format!(
-                "No common item type found in line: {:?}",
-                &rucksacks
-            ))
+            .unwrap_or_else(|| panic!("No common item type found in line: {:?}",
+                &rucksacks))
             .0
-            .clone()
     });
 
     Some(

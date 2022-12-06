@@ -13,7 +13,7 @@ pub struct Solution<'a> {
 // Todo implement benchmarking
 impl<'a> Solution<'a> {
     fn evaluate(&self) -> (Option<i32>, Option<i32>) {
-        ((self.part1)(&self.input), (self.part2)(&self.input))
+        ((self.part1)(self.input), (self.part2)(self.input))
     }
 }
 
