@@ -32,23 +32,23 @@ fn part1(input: &str) -> Option<i32> {
 }
 
 fn part2(input: &str) -> Option<i32> {
-    let part2 = &parse(input)
+    let part2: Vec<(Move, Move)> = parse(input)
         .iter()
         .map(|(fst, snd)| {
             let wins = fst.winner_over();
             let loses = fst.loser_over();
             let snd = match snd {
-                Move::ROCK => loses,    // you lose
-                Move::PAPER => *fst,    // you draw
-                Move::SCISSORS => wins, // you win
+                Move::Rock => loses,    // you lose
+                Move::Paper => *fst,    // you draw
+                Move::Scissors => wins, // you win
             };
             (*fst, snd)
         })
         .collect();
-    Some(score(part2))
+    Some(score(&part2))
 }
 
-fn score(pairs: &Vec<(Move, Move)>) -> i32 {
+fn score(pairs: &[(Move, Move)]) -> i32 {
     pairs
         .iter()
         .map(|(fst, snd)| {
@@ -66,9 +66,9 @@ fn score(pairs: &Vec<(Move, Move)>) -> i32 {
 
 #[derive(PartialEq, Copy, Clone)]
 enum Move {
-    ROCK = 0,
-    PAPER = 1,
-    SCISSORS = 2,
+    Rock = 0,
+    Paper = 1,
+    Scissors = 2,
 }
 
 impl Move {
@@ -83,18 +83,18 @@ impl Move {
 
     fn loser_over(&self) -> Move {
         match (*self as isize - 1).rem_euclid(3) {
-            0 => Move::ROCK,
-            1 => Move::PAPER,
-            2 => Move::SCISSORS,
+            0 => Move::Rock,
+            1 => Move::Paper,
+            2 => Move::Scissors,
             _ => unreachable!("Guaranteed by mod 3"),
         }
     }
 
     fn winner_over(&self) -> Move {
         match (*self as isize + 1).rem_euclid(3) {
-            0 => Move::ROCK,
-            1 => Move::PAPER,
-            2 => Move::SCISSORS,
+            0 => Move::Rock,
+            1 => Move::Paper,
+            2 => Move::Scissors,
             _ => unreachable!("Guaranteed by mod 3"),
         }
     }
@@ -104,9 +104,9 @@ impl TryFrom<&str> for Move {
     type Error = String;
     fn try_from(v: &str) -> Result<Self, Self::Error> {
         match v {
-            "A" | "X" => Ok(Move::ROCK),
-            "B" | "Y" => Ok(Move::PAPER),
-            "C" | "Z" => Ok(Move::SCISSORS),
+            "A" | "X" => Ok(Move::Rock),
+            "B" | "Y" => Ok(Move::Paper),
+            "C" | "Z" => Ok(Move::Scissors),
             _ => Err(format!("Input '{}' can't be parsed", v)),
         }
     }
