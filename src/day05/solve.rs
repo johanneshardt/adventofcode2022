@@ -86,21 +86,19 @@ pub(super) mod parsing {
 }
 
 fn part1(input: &str) -> Option<String> {
-    let (stacksx, instructions) = parsing::parse(input);
-    let mut stacks = transpose(stacksx);
+    let (stacks, instructions) = parsing::parse(input);
+    let mut stacks = transpose(stacks);
     for i in instructions {
         let (count, from, to) = i.into();
         for _ in 0..count {
-            let from_stack = &mut stacks[from as usize];
-            let removed = from_stack.pop().expect("Can't pop empty stack!");
-            let to_stack = &mut stacks[to as usize];
-            to_stack.push(removed);
+            stacks.transfer(1, from as usize, to as usize);
         }
     }
     Some(
         stacks
+            .s
             .iter()
-            .filter_map(|s| s.last())
+            .filter_map(|s| s.s.last())
             .fold("".to_owned(), |acc, curr| acc + &curr.c.to_string()),
     )
 }
@@ -110,23 +108,45 @@ fn part2(input: &str) -> Option<String> {
     let mut stacks = transpose(stacksx);
     for i in instructions {
         let (count, from, to) = i.into();
-        let from_stack = &mut stacks[from as usize];
-        let removed: Vec<Crate> = from_stack
-            .drain(from_stack.len() - count as usize..)
-            .collect();
-        stacks[to as usize].extend(removed);
+        stacks.transfer(count as usize, from as usize, to as usize);
     }
     Some(
         stacks
+            .s
             .iter()
-            .filter_map(|s| s.last())
+            .filter_map(|s| s.s.last())
             .fold("".to_owned(), |acc, curr| acc + &curr.c.to_string()),
     )
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy)]
 pub(self) struct Crate {
     c: char,
+}
+
+pub(self) struct Stack {
+    s: Vec<Crate>,
+}
+
+impl Stack {
+    fn pop(&mut self, count: usize) -> Vec<Crate> {
+        self.s.drain(self.s.len() - count..).collect()
+    }
+
+    fn push(&mut self, elems: &mut Vec<Crate>) {
+        self.s.append(elems)
+    }
+}
+
+pub(self) struct Stacks {
+    s: Vec<Stack>,
+}
+
+impl Stacks {
+    fn transfer(&mut self, count: usize, from: usize, to: usize) {
+        let mut crates = self.s[from].pop(count);
+        self.s[to].push(&mut crates);
+    }
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -143,15 +163,20 @@ impl From<Instruction> for (u8, u8, u8) {
 }
 
 // Rows to stacks
-fn transpose(mat: Vec<Vec<Option<Crate>>>) -> Vec<Vec<Crate>> {
-    (0..mat.first().unwrap().len())
-        .into_iter()
-        .map(|col| {
-            mat.iter()
-                .map(|row| row[col])
-                .rev()
-                .flatten() // cringe
-                .collect::<Vec<Crate>>()
-        })
-        .collect_vec()
+fn transpose(mat: Vec<Vec<Option<Crate>>>) -> Stacks {
+    Stacks {
+        s: (0..mat.first().unwrap().len())
+            .into_iter()
+            .map(|col| {
+                Stack {
+                    s: mat
+                        .iter()
+                        .map(|row| row[col])
+                        .rev()
+                        .flatten() // cringe
+                        .collect::<Vec<Crate>>(),
+                }
+            })
+            .collect_vec(),
+    }
 }
