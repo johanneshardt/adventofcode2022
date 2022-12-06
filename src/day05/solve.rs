@@ -1,5 +1,4 @@
 use crate::util::Solution;
-use itertools::Itertools;
 
 pub const SOLUTION: Solution<'static, String> = Solution {
     day: 05,
@@ -46,9 +45,11 @@ pub(super) mod parsing {
                 terminated(alpha1, space),       // "word "
             ))(input)
         }
+
         fn match_num(input: &str) -> IResult<&str, u8> {
             map(preceded(word, u8), |i| i)(input)
         }
+
         map(
             tuple((match_num, match_num, match_num)),
             |(count, from, to)| Instruction {
@@ -138,6 +139,14 @@ impl Stack {
     }
 }
 
+impl FromIterator<Crate> for Stack {
+    fn from_iter<T: IntoIterator<Item = Crate>>(iter: T) -> Self {
+        Stack {
+            s: iter.into_iter().collect(),
+        }
+    }
+}
+
 pub(self) struct Stacks {
     s: Vec<Stack>,
 }
@@ -146,6 +155,14 @@ impl Stacks {
     fn transfer(&mut self, count: usize, from: usize, to: usize) {
         let mut crates = self.s[from].pop(count);
         self.s[to].push(&mut crates);
+    }
+}
+
+impl FromIterator<Stack> for Stacks {
+    fn from_iter<T: IntoIterator<Item = Stack>>(iter: T) -> Self {
+        Stacks {
+            s: iter.into_iter().collect(),
+        }
     }
 }
 
@@ -164,19 +181,14 @@ impl From<Instruction> for (u8, u8, u8) {
 
 // Rows to stacks
 fn transpose(mat: Vec<Vec<Option<Crate>>>) -> Stacks {
-    Stacks {
-        s: (0..mat.first().unwrap().len())
-            .into_iter()
-            .map(|col| {
-                Stack {
-                    s: mat
-                        .iter()
-                        .map(|row| row[col])
-                        .rev()
-                        .flatten() // cringe
-                        .collect::<Vec<Crate>>(),
-                }
-            })
-            .collect_vec(),
-    }
+    (0..mat.first().unwrap().len())
+        .into_iter()
+        .map(|col| {
+            mat.iter()
+                .map(|row| row[col])
+                .rev()
+                .flatten() // cringe
+                .collect()
+        })
+        .collect()
 }
