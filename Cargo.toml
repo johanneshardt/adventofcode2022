@@ -1,11 +1,13 @@
 [package]
 name = "adventofcode2022"
+description = "My solutions to the advent of code 2022 problems, in Rust."
+authors = ["johanneshardt <me@johanneshardt.com"]
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-color-eyre = "0.6.2"
-itertools = "0.10.5"
-nom = "7.1.1"
+color-eyre = "0.6.4"
+itertools = "0.14.0"
+nom = "8.0.0"

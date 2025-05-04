@@ -13,12 +13,12 @@ pub const SOLUTION: Solution<'static, String> = Solution {
 pub(super) mod parsing {
 
     use nom::{
+        IResult, Parser,
         branch::alt,
         character::complete::{alpha1, char, line_ending, not_line_ending, satisfy, u8},
         combinator::{all_consuming, map, value},
         multi::{count, many1, separated_list1},
-        sequence::{delimited, preceded, terminated, tuple},
-        IResult,
+        sequence::{delimited, preceded, terminated},
     };
 
     use super::{Crate, Instruction};
@@ -29,11 +29,11 @@ pub(super) mod parsing {
             |c: char| Some(Crate { c }),
         );
         let parse_empty = value(None, count(space, 3));
-        alt((parse_crate, parse_empty))(input) // match either a crate '[<char>]' or a space '   '
+        alt((parse_crate, parse_empty)).parse(input) // match either a crate '[<char>]' or a space '   '
     }
 
     fn line_blocks(input: &str) -> IResult<&str, Vec<Option<Crate>>> {
-        separated_list1(space, match_block)(input)
+        separated_list1(space, match_block).parse(input)
     }
 
     fn space(input: &str) -> IResult<&str, char> {
@@ -45,32 +45,33 @@ pub(super) mod parsing {
             alt((
                 delimited(space, alpha1, space), // " word "
                 terminated(alpha1, space),       // "word "
-            ))(input)
+            ))
+            .parse(input)
         }
 
         fn match_num(input: &str) -> IResult<&str, u8> {
-            map(preceded(word, u8), |i| i)(input)
+            map(preceded(word, u8), |i| i).parse(input)
         }
 
-        map(
-            tuple((match_num, match_num, match_num)),
-            |(count, from, to)| Instruction {
+        map((match_num, match_num, match_num), |(count, from, to)| {
+            Instruction {
                 count,
                 from: from - 1,
                 to: to - 1,
-            },
-        )(input)
+            }
+        })
+        .parse(input)
     }
 
     pub(super) fn parse(input: &str) -> (Vec<Vec<Option<Crate>>>, Vec<Instruction>) {
         let term_blocks = terminated(line_blocks, line_ending);
-        let (input, towers) = match many1(term_blocks)(input) {
+        let (input, towers) = match many1(term_blocks).parse(input) {
             Ok((input, towers)) => (input, towers),
             Err(e) => panic!("{}", e),
         };
 
         fn skip(input: &str) -> IResult<&str, &str> {
-            terminated(terminated(not_line_ending, line_ending), line_ending)(input)
+            terminated(terminated(not_line_ending, line_ending), line_ending).parse(input)
         }
 
         // There are better ways to skip lines
@@ -80,7 +81,7 @@ pub(super) mod parsing {
         };
 
         let instructions =
-            match all_consuming(separated_list1(line_ending, line_instruction))(input) {
+            match all_consuming(separated_list1(line_ending, line_instruction)).parse(input) {
                 Ok((_, is)) => is,
                 Err(e) => panic!("{}", e),
             };
