@@ -109,8 +109,8 @@ fn part1(input: &str) -> Option<String> {
 }
 
 fn part2(input: &str) -> Option<String> {
-    let (stacksx, instructions) = parsing::parse(input);
-    let mut stacks = transpose(stacksx);
+    let (stacks, instructions) = parsing::parse(input);
+    let mut stacks = transpose(stacks);
     for i in instructions {
         let (count, from, to) = i.into();
         stacks.transfer(count as usize, from as usize, to as usize);

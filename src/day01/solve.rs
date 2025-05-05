@@ -14,10 +14,10 @@ fn parse(input: &str) -> Vec<i32> {
         .split("\n\n")
         .map(|chunk| {
             chunk
-                .split_ascii_whitespace()
+                .split("\n")
                 .map(|line| match line.trim().parse::<i32>() {
                     Ok(l) => l,
-                    Err(_) => panic!("Parsing error: {}", line),
+                    Err(_) => panic!("Parsing error for line: `{}`", line),
                 })
                 .sum()
         })
