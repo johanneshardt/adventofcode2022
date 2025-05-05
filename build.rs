@@ -87,12 +87,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+
 fn check_and_download_input(
     day: u8,
     session_token: &str,
     dir: &Path,
 ) -> Result<(), Box<dyn Error>> {
-    let input_path = dir.join("in");
+    let input_path = dir.join("main.input");
     if !input_path.exists() {
         println!(
             "cargo:warning=Input file '{}' not found. Attempting download...",
@@ -117,7 +118,8 @@ fn check_and_download_input(
             Ok(mut response) => {
                 let body = response.body_mut().read_to_string()?;
                 let mut file = fs::File::create(&input_path)?;
-                file.write_all(body.trim().as_bytes())?;
+                // puzzle inputs have a trailing newline
+                file.write_all(body.trim_end().as_bytes())?;
                 println!(
                     "cargo:warning=Successfully downloaded and saved '{}'",
                     input_path.display()
