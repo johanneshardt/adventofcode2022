@@ -92,7 +92,6 @@ fn check_and_download_input(
     session_token: &str,
     dir: &Path,
 ) -> Result<(), Box<dyn Error>> {
-    println!("cargo:warning=hejjjjj",);
     let input_path = dir.join("in");
     if !input_path.exists() {
         println!(
