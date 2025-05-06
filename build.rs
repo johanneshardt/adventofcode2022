@@ -46,6 +46,7 @@ fn read_env_file() -> io::Result<HashMap<String, String>> {
 
 fn main() -> Result<(), Box<dyn Error>> {
     println!("cargo:rerun-if-changed=.env"); // Rerun if .env changes
+    println!("cargo:rerun-if-changed=src"); // Rerun if new day directory is added (doesn't rerun when files are changed, only created/deleted)
 
     let session_token = match read_env_file() {
         Ok(variables) => match variables.get("AOC_SESSION") {
