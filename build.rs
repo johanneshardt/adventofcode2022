@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs::File;
-use std::io::{self, BufRead, BufReader, Stdout};
+use std::io::{self, BufRead, BufReader};
 use std::path::Path;
 
 use std::fs;
@@ -87,7 +87,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
-
 
 fn check_and_download_input(
     day: u8,

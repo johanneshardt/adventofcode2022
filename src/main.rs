@@ -5,6 +5,7 @@ mod day03;
 mod day04;
 mod day05;
 mod day06;
+mod day07;
 mod util;
 
 fn main() {
@@ -16,6 +17,7 @@ fn main() {
             Box::new(day04::SOLUTION),
             Box::new(day05::SOLUTION),
             Box::new(day06::SOLUTION),
+            Box::new(day07::SOLUTION),
         ],
     };
     println!("{}", solved_days);

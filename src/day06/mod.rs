@@ -1,7 +1,6 @@
 use std::collections::HashSet;
 
 use crate::util::Solution;
-use itertools::Itertools;
 
 pub const SOLUTION: Solution<'static, u32> = Solution {
     day: 06,
