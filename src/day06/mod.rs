@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use crate::util::Solution;
 
-pub const SOLUTION: Solution<'static, u32> = Solution {
+pub const SOLUTION: Solution<'static, u32, u32> = Solution {
     day: 06,
     title: "Tuning Trouble",
     input: include_str!("./main.input"),

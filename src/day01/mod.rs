@@ -1,7 +1,7 @@
 use crate::util::Solution;
 use itertools::Itertools;
 
-pub const SOLUTION: Solution<'static, i32> = Solution {
+pub const SOLUTION: Solution<'static, i32, i32> = Solution {
     day: 01,
     title: "Calorie Counting",
     input: include_str!("./main.input"),

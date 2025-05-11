@@ -8,7 +8,12 @@ type = "string"
 prompt = "What's the day's title?"
 
 
-[placeholders.returntype]
+[placeholders.returntype1]
 type = "string"
-prompt = "What return type is expected?"
+prompt = "What return type is expected for part 1?"
+regex = "^(String|i32|u32){1}$"
+
+[placeholders.returntype2]
+type = "string"
+prompt = "What return type is expected for part 2?"
 regex = "^(String|i32|u32){1}$"

@@ -4,7 +4,7 @@ use crate::util::Solution;
 use itertools::Itertools;
 use tap::prelude::*;
 
-pub const SOLUTION: Solution<'static, u32> = Solution {
+pub const SOLUTION: Solution<'static, u32, u32> = Solution {
     day: 07,
     title: "No Space Left On Device",
     input: include_str!("./main.input"),
@@ -137,9 +137,9 @@ fn parse(input: &str) -> Node {
 }
 
 fn part1(input: &str) -> Option<u32> {
-    let d = parse(input);
     Some(
-        d.flatten_dirs()
+        parse(input)
+            .flatten_dirs()
             .into_iter()
             .filter(|size| *size <= 100_000)
             .sum(),

@@ -1,7 +1,7 @@
-use crate::util::Solution;
+use crate::util::*;
 use itertools::Itertools;
 
-pub const SOLUTION: Solution<'static, {{returntype}}> = Solution {
+pub const SOLUTION: Solution<'static, {{returntype1}}, {{returntype2}}> = Solution {
     day: {{day}},
     title: "{{title}}",
     input: include_str!("./main.input"),
@@ -9,11 +9,11 @@ pub const SOLUTION: Solution<'static, {{returntype}}> = Solution {
     part2,
 };
 
-fn part1(input: &str) -> Option<{{returntype}}> {
+fn part1(input: &str) -> Option<{{returntype1}}> {
     None
 }
 
-fn part2(input: &str) -> Option<{{returntype}}> {
+fn part2(input: &str) -> Option<{{returntype2}}> {
     None
 }
 

@@ -3,7 +3,7 @@ use std::{collections::HashMap, collections::HashSet};
 use crate::util::Solution;
 use itertools::Itertools;
 
-pub const SOLUTION: Solution<'static, i32> = Solution {
+pub const SOLUTION: Solution<'static, i32, i32> = Solution {
     day: 03,
     title: "Rucksack Reorganization",
     input: include_str!("./main.input"),
